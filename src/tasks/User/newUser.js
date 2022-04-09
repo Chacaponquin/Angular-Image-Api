@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import User from "../../db/models/User.js";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
+import { createSendUser } from "../../helpers/userSend.js";
 
 dotenv.config();
 
@@ -19,18 +20,7 @@ export const createUser = async(req, res) => {
     newUser
         .save()
         .then(() => {
-            const { images, username, _id } = newUser;
-
-            const token = jwt.sign({ _id, username }, process.env.SECRET_WORD);
-
-            res
-                .json({
-                    images,
-                    username,
-                    token,
-                })
-                .status(204)
-                .end();
+            res.json(createSendUser(newUser)).status(204).end();
         })
         .catch((err) => {
             console.log(err);

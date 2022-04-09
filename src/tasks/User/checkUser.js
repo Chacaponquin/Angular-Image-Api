@@ -6,7 +6,7 @@ export const checkUser = async(req, res) => {
     const { email, password } = req.body;
 
     try {
-        const userFound = await User.findOne({ email: email });
+        const userFound = await User.findOne({ email: email }).populate("images");
 
         if (userFound) {
             if (await bcrypt.compare(password, userFound.password)) {
